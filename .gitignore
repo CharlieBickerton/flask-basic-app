@@ -4,3 +4,4 @@ __pycache__
 # vit env
 flask-basic-app
 
+site.db
