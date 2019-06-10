@@ -66,10 +66,20 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route("/account")
+@app.route("/account", methods=['GET', 'POST'])
 @login_required # this makes it simple for enforcing users to be logged in
 def account():
     form = UpdateAccountForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Your account has been updated!', 'success')
+        return redirect(url_for('account')) # this line forces the browser to send another get request preventing the 'do you want to submit your data again?' issue
+    elif request.method == 'GET':
+        # if it's a GET request the pre-populate the fields with the current variables
+        form.username.data = current_user.username
+        form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title="Account", image_file=image_file, form=form)
 
