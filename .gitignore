@@ -4,4 +4,9 @@ __pycache__
 # vit env
 flask-basic-app
 
+# database
 site.db
+
+# ignore profile pics except default
+app/static/profile_pics/*
+!app/static/profile_pics/default.jpg
