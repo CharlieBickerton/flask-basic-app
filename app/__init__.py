@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -22,6 +23,14 @@ def create_app(config_class=Config):
     app.config.from_object(Config) # import config variables and execute for app
 
     db.init_app(app)
+    db_file_path = os.path.join(app.root_path, 'site.db')
+
+    if not os.path.isfile(db_file_path): # if there is no db create db
+        print('db not found - creating db')
+        db.create_all()
+    else:
+        print('db already created')
+
     bcrypt.init_app(app)
     login_manager.init_app(app)
     login_manager.init_app(app)
